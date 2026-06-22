@@ -1,0 +1,2 @@
+- php artisan queue:work
+- php artisan notifications:cleanup    ( Delete notifications older than one month )

@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClinicsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -59,5 +60,18 @@ Route::group(['middleware' => 'auth'] , function(){    // middleware alias in bo
     // Doctor My Appointaments
     Route::get('doctor/doctor_appointaments/list', [DoctorController::class , 'my_appointaments_doctor'] );
 
+
+    // notifications
+    Route::get('user/notifications' , [NotificationsController::class , 'list']);
+
+    Route::get('user/read-all-notifications' , [NotificationsController::class , 'readAll']);
+
+    Route::get('user/unread-all-notifications' , [NotificationsController::class , 'unReadAll']);
+
+    Route::get('user/read-notification/{id}', [NotificationsController::class , 'readNotification']);
+
+    Route::get('user/unread-notification/{id}', [NotificationsController::class , 'unReadNotification']);
+
+    Route::get('user/delete-notification/{id}', [NotificationsController::class , 'deleteNotification'] );
 
 });

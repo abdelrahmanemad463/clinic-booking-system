@@ -1,3 +1,16 @@
+  <style>
+    .notification-item {
+      width: 250px;
+      white-space: normal !important;
+      line-height: 1.4;
+  }
+  .notification-item div {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+  }
+  </style>
+
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <!-- Left navbar links -->
@@ -11,6 +24,34 @@
 
   <ul class="navbar-nav ml-auto">
     @if (!empty(Auth::check()))
+
+    <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
+          <i class="far fa-bell"></i>
+          <span class="badge badge-warning navbar-badge">{{ auth()->user()->unreadNotifications->count() }}</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
+          <span class="dropdown-item dropdown-header">{{ auth()->user()->unreadNotifications->count() }} Notifications</span>
+
+
+          @foreach(auth()->user()->unreadNotifications()->latest()->take(5)->get() as $notification)
+              <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item notification-item">
+                  <div>
+                      <i class="fas fa-envelope mr-2"></i>
+                      {{ $notification->data['content'] }}
+                  </div>
+              </a>
+          @endforeach
+         
+          
+          <div class="dropdown-divider"></div>
+          <a href="{{ url('user/notifications') }}" class="dropdown-item dropdown-footer">See All Notifications</a>
+          <div class="dropdown-divider"></div>
+          <a href="{{ url('user/read-all-notifications') }}" class="dropdown-item dropdown-footer">Read All Notifications</a>
+        </div>
+      </li>
+
       <li class="nav-item">
         <a href="{{ url('logout') }}" class="nav-link">
           <p>Sign Out</p>

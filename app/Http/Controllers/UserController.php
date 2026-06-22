@@ -9,9 +9,11 @@ use App\Models\Bookings;
 use App\Models\DoctorClinic;
 use App\Models\DoctorClinicTimetableModel;
 use App\Models\User;
+use App\Notifications\UserBook;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 
 
 class UserController extends Controller
@@ -60,6 +62,10 @@ class UserController extends Controller
         // send mail to doctor that user booked to him
         $doctor = User::find($book->doctor_id);
         Mail::to($doctor->email)->send(new DoctorBookMail($book , $doctor , $auth));
+        
+        // send notification to doctor that user booked to him
+        $content ="You have a new book | name: ".$auth->name." from ".$book->start_time." to ".$book->end_time;
+        Notification::send($doctor,new UserBook($content));
 
         return redirect()->back()->with('success' , 'Appointment Successfully Saved');
         
