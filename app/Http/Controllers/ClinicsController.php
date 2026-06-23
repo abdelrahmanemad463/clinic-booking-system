@@ -3,12 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Models\Clinics;
+use App\Models\PermissionRoleModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ClinicsController extends Controller
 {
     public function list() {
+        
+        $PermissionRole = PermissionRoleModel::getPermission('Clinic' , Auth::user()->role_id);
+
+        if (empty($PermissionRole)) {
+                abort(404);
+        }
+
+        $data['PermissionAdd'] = PermissionRoleModel::getPermission('Add Clinic' , Auth::user()->role_id);
+        $data['PermissionEdit'] = PermissionRoleModel::getPermission('Edit Clinic' , Auth::user()->role_id);
+        $data['PermissionDelete'] = PermissionRoleModel::getPermission('Delete Clinic' , Auth::user()->role_id);
+
         $data['header_title'] = 'Clinics List';
         $data['getRecord'] = Clinics::getAll();
         return view('admin.clinics.list' , $data);
@@ -16,6 +28,12 @@ class ClinicsController extends Controller
 
     
     public function add() {
+        $PermissionRole = PermissionRoleModel::getPermission('Add Clinic' , Auth::user()->role_id);
+
+        if (empty($PermissionRole)) {
+                abort(404);
+        }
+
         $data['header_title'] = 'Clinics Add';
         return view('admin.clinics.add' , $data);
     }
@@ -39,6 +57,12 @@ class ClinicsController extends Controller
     }
 
     public function edit($id) {
+        $PermissionRole = PermissionRoleModel::getPermission('Edit Clinic' , Auth::user()->role_id);
+
+        if (empty($PermissionRole)) {
+                abort(404);
+        }
+
         $data['header_title'] = 'Edit User';
         $data['getRecord'] = Clinics::find($id);
 

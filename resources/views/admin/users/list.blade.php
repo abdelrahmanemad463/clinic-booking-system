@@ -12,11 +12,11 @@
           <div class="col-sm-6">
             <h1>Users List</h1>
           </div>
-          
-          <div class="col-sm-6" style="text-align:right;">
-            <a href="{{ url('admin/users/add') }}" class="btn btn-success">Add New User</a>
-          </div>
-
+          @if (!empty($PermissionAdd))
+            <div class="col-sm-6" style="text-align:right;">
+              <a href="{{ url('admin/users/add') }}" class="btn btn-success">Add New User</a>
+            </div>
+          @endif
         </div>
       </div><!-- /.container-fluid -->
     </section>
@@ -42,7 +42,10 @@
                     <th>Created By</th>
                     <th>Created At</th>
                     <th>Updated At</th>
-                    <th>Action</th>
+                    @if (!empty($PermissionEdit) || !empty($PermissionDelete))
+                      <th>Action</th>
+                    @endif
+                    
                   </tr>
                   </thead>
                   <tbody>
@@ -63,18 +66,33 @@
                         <td>{{ $user->created_by_name }}</td>
                         <td>{{ $user->created_at }}</td>
                         <td>{{ $user->updated_at }}</td>
-                        <td>
-                          <div class="btn-group">
-                          <button type="button" class="btn btn-info">Action</button>
-                          <button type="button" class="btn btn-info dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
-                            <span class="sr-only">Toggle Dropdown</span>
-                          </button>
-                          <div class="dropdown-menu" role="menu" style="">
-                            <a class="dropdown-item" href="{{ url('admin/users/edit/'.$user->id) }}">Edit</a>
-                            <a class="dropdown-item" href="{{ url('admin/users/delete/'.$user->id) }}">Delete</a>
-                          </div>
-                        </div>
-                        </td>
+
+                        
+                          @if (!empty($PermissionEdit) || !empty($PermissionDelete))
+                            <td>
+                              <div class="btn-group">
+                              <button type="button" class="btn btn-info">Action</button>
+                              <button type="button" class="btn btn-info dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
+                                <span class="sr-only">Toggle Dropdown</span>
+                              </button>
+
+                                <div class="dropdown-menu" role="menu" style="">
+
+                                @if (!empty($PermissionEdit))
+                                  <a class="dropdown-item" href="{{ url('admin/users/edit/'.$user->id) }}">Edit</a>
+                                @endif
+
+                                @if (!empty($PermissionDelete))
+                                  <a class="dropdown-item" href="{{ url('admin/users/delete/'.$user->id) }}">Delete</a>
+                                @endif  
+                                  
+                                </div>
+
+                              </div>
+                            </td>
+                          @endif 
+                        
+
                       </tr>
                     @endforeach ()
                   </tbody>

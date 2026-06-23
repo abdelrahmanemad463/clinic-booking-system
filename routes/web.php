@@ -6,6 +6,7 @@ use App\Http\Controllers\ClinicsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\NotificationsController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -39,6 +40,14 @@ Route::group(['middleware' => 'auth'] , function(){    // middleware alias in bo
     Route::get('admin/users/edit/{id}', [AdminController::class , 'edit'] );
     Route::post('admin/users/edit/{id}', [AdminController::class , 'update'] );
     Route::get('admin/users/delete/{id}', [AdminController::class , 'delete'] );
+
+    // roles (admin role)
+    Route::get('admin/role', [RoleController::class , 'list'] );
+    Route::get('admin/role/add', [RoleController::class , 'add'] );
+    Route::post('admin/role/add', [RoleController::class , 'insert'] );
+    Route::get('admin/role/edit/{id}', [RoleController::class , 'edit'] );
+    Route::post('admin/role/edit/{id}', [RoleController::class , 'update'] );
+    Route::get('admin/role/delete/{id}', [RoleController::class , 'delete'] );
 
     // clinics
     Route::get('admin/clinics/list', [ClinicsController::class , 'list'] );

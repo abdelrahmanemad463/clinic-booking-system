@@ -1,4 +1,16 @@
-  <style>
+@php
+  if(!empty(Auth::check())) {
+    $PermissionUsers = App\Models\PermissionRoleModel::getPermission('User' , Auth::user()->role_id);
+    $PermissionClinics = App\Models\PermissionRoleModel::getPermission('Clinic' , Auth::user()->role_id);
+    $PermissionRole = App\Models\PermissionRoleModel::getPermission('Role' , Auth::user()->role_id);
+    $PermissionAssignDoctorToClinic = App\Models\PermissionRoleModel::getPermission('Assign clinic to doctor' , Auth::user()->role_id);
+    $PermissionSetDoctorAppointaments = App\Models\PermissionRoleModel::getPermission('Set Doctor Appointaments' , Auth::user()->role_id);
+    $PermissionPendingAppointaments = App\Models\PermissionRoleModel::getPermission('Pending Appointaments' , Auth::user()->role_id);
+    $PermissionAllAppointaments = App\Models\PermissionRoleModel::getPermission('All Appointaments' , Auth::user()->role_id);
+  }
+@endphp
+
+<style>
     .notification-item {
       width: 250px;
       white-space: normal !important;
@@ -127,9 +139,13 @@
               <p>My Appointaments</p>
             </a>
           </li>
-
+          
+          @if (!empty($PermissionUsers) || !empty($PermissionRole) || !empty($PermissionClinics) || !empty($PermissionAssignDoctorToClinic) || !empty($PermissionSetDoctorAppointaments) || !empty($PermissionPendingAppointaments) || !empty($PermissionAllAppointaments))
             <li class="nav-header" style="text-align: center;">ADMIN</li>
+          @endif
+            
 
+        @if (!empty($PermissionUsers))
           <li class="nav-item">
             <a href="{{ url('admin/users/list') }}" class="nav-link @if(Request::segment(2) == 'users') active @endif">
               <i class="nav-icon far fa-user"></i>
@@ -138,16 +154,29 @@
               </p>
             </a>
           </li>
+        @endif
 
+          @if (!empty($PermissionClinics))
+            <li class="nav-item">
+              <a href="{{ url('admin/clinics/list') }}" class="nav-link @if(Request::segment(2) == 'clinics') active @endif">
+                <i class="nav-icon far fa-user"></i>
+                <p>
+                  Clinics
+                </p>
+              </a>
+            </li>
+          @endif
+          
+          @if (!empty($PermissionRole))
           <li class="nav-item">
-            <a href="{{ url('admin/clinics/list') }}" class="nav-link @if(Request::segment(2) == 'clinics') active @endif">
+            <a href="{{ url('admin/role') }}" class="nav-link @if(Request::segment(2) == 'role') active @endif">
               <i class="nav-icon far fa-user"></i>
               <p>
-                Clinics
+                Role
               </p>
             </a>
           </li>
-          
+        @endif
 
           <!-- <li class="nav-item">
             <a href="{{ url('admin/users/list') }}" class="nav-link @if(Request::segment(2) == 'user') active @endif">
@@ -157,16 +186,16 @@
               </p>
             </a>
           </li> -->
-          
-          <li class="nav-item">
-            <a href="{{ url('admin/assign/list') }}" class="nav-link @if(Request::segment(2) == 'assign') active @endif">
-              <i class="nav-icon far fa-user"></i>
-              <p>
-                Assign Doctor To Clinic
-              </p>
-            </a>
-          </li>
-
+          @if (!empty($PermissionAssignDoctorToClinic))
+            <li class="nav-item">
+              <a href="{{ url('admin/assign/list') }}" class="nav-link @if(Request::segment(2) == 'assign') active @endif">
+                <i class="nav-icon far fa-user"></i>
+                <p>
+                  Assign Doctor To Clinic
+                </p>
+              </a>
+            </li>
+          @endif
           <!-- <li class="nav-item">
             <a href="{{ url('admin/users/list') }}" class="nav-link @if(Request::segment(2) == 'user') active @endif">
               <i class="nav-icon far fa-user"></i>
@@ -175,7 +204,7 @@
               </p>
             </a>
           </li> -->
-
+        @if (!empty($PermissionSetDoctorAppointaments))
           <li class="nav-item">
             <a href="{{ url('admin/set_doctor_appointaments') }}" class="nav-link @if(Request::segment(2) == 'set_doctor_appointaments') active @endif">
               <i class="nav-icon far fa-user"></i>
@@ -184,20 +213,25 @@
               </p>
             </a>
           </li>
+        @endif
 
+        @if (!empty($PermissionPendingAppointaments))
           <li class="nav-item">
             <a href="{{ url('admin/users/list') }}" class="nav-link @if(Request::segment(2) == 'user') active @endif">
               <i class="nav-icon far fa-user"></i>
               <p>Pending Appointaments</p>
             </a>
           </li>
+        @endif
 
+        @if (!empty($PermissionAllAppointaments))
           <li class="nav-item">
             <a href="{{ url('admin/users/list') }}" class="nav-link @if(Request::segment(2) == 'user') active @endif">
               <i class="nav-icon far fa-user"></i>
               <p>All Appointaments</p>
             </a>
           </li>
+        @endif
 
             <li class="nav-header" style="text-align: center;">DOCTOR</li>
 

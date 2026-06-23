@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DoctorClinicTimetableModel;
 use App\Models\Clinics;
 use App\Models\DoctorClinic;
+use App\Models\PermissionRoleModel;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +14,16 @@ use Illuminate\Support\Facades\Hash;
 class AdminController extends Controller
 {
     public function list() {
+        $PermissionRole = PermissionRoleModel::getPermission('User' , Auth::user()->role_id);
+
+        if (empty($PermissionRole)) {
+                abort(404);
+        }
+
+        $data['PermissionAdd'] = PermissionRoleModel::getPermission('Add User' , Auth::user()->role_id);
+        $data['PermissionEdit'] = PermissionRoleModel::getPermission('Edit User' , Auth::user()->role_id);
+        $data['PermissionDelete'] = PermissionRoleModel::getPermission('Delete User' , Auth::user()->role_id);
+
         $data['header_title'] = 'Users List';
         // dd(User::getAll());
         $data['users'] = User::getAll();
@@ -21,6 +32,12 @@ class AdminController extends Controller
 
     
     public function add() {
+        $PermissionRole = PermissionRoleModel::getPermission('Add User' , Auth::user()->role_id);
+
+        if (empty($PermissionRole)) {
+                abort(404);
+        }
+
         $data['header_title'] = 'Users Add';
         return view('admin.users.add' , $data);
     }
@@ -65,6 +82,13 @@ class AdminController extends Controller
     }
 
     public function edit($id) {
+
+        $PermissionRole = PermissionRoleModel::getPermission('Edit User' , Auth::user()->role_id);
+
+        if (empty($PermissionRole)) {
+                abort(404);
+        }
+
         $data['header_title'] = 'Edit User';
         $data['user'] = User::find($id);
 
@@ -122,12 +146,24 @@ class AdminController extends Controller
     // assign to doctor
 
     public function assign_list() {
+        $PermissionRole = PermissionRoleModel::getPermission('Assign clinic to doctor' , Auth::user()->role_id);
+
+        if (empty($PermissionRole)) {
+                abort(404);
+        }
+
         $data['header_title'] = 'assign List';
         // dd(User::getAll());
         $data['getRecord'] = User::getAllDoctors();
         return view('admin.assign.list' , $data);
     }
     public function assign_to_doctor($id) {
+        $PermissionRole = PermissionRoleModel::getPermission('Assign to doctor' , Auth::user()->role_id);
+
+        if (empty($PermissionRole)) {
+                abort(404);
+        }
+
         $data['header_title'] = 'Assign To Doctor';
         // dd(User::getAll());
         if(User::checkIfNotDoctor($id)->count() > 0) {
@@ -161,6 +197,13 @@ class AdminController extends Controller
     // set_doctor_appointaments
 
     public function set_doctor_appointaments(Request $request) {
+
+        $PermissionRole = PermissionRoleModel::getPermission('Set Doctor Appointaments' , Auth::user()->role_id);
+
+        if (empty($PermissionRole)) {
+                abort(404);
+        }
+
         $data['header_title'] = "Set Doctor Appointaments";
 
         $data['getDoctor'] = User::getAllDoctors();

@@ -8,9 +8,11 @@
           <h1>Clinics</h1>
         </div>
 
+      @if (!empty($PermissionAdd))
         <div class="col-sm-6" style="text-align:right;">
           <a href="{{ url('admin/clinics/add') }}" class="btn btn-primary">Add new clinic</a>
         </div>
+      @endif
 
       </div>
     </div>
@@ -72,7 +74,11 @@
                     <th>Status</th>
                     <th style="min-width: 100px;">Created By</th>
                     <th style="min-width: 165px;">Created Date</th>
-                    <th style="min-width: 165px;">Action</th>
+
+                    @if (!empty($PermissionEdit) || !empty($PermissionDelete))
+                      <th style="min-width: 165px;">Action</th>
+                    @endif
+                    
                   </tr>
                 </thead>
                 <tbody>
@@ -94,8 +100,14 @@
                         <td>{{ $value->created_by_name }}</td>
                         <td>{{ $value->created_at }}</td>
                         <td>
-                          <a href="{{ url('admin/clinics/edit/'.$value->id) }}" class="btn btn-primary">Edit</a>
-                          <a href="{{ url('admin/clinics/edit/'.$value->id) }}" class="btn btn-danger">Delete</a>
+                          @if (!empty($PermissionEdit))
+                            <a href="{{ url('admin/clinics/edit/'.$value->id) }}" class="btn btn-primary">Edit</a>
+                          @endif
+
+                          @if (!empty($PermissionDelete))
+                            <a href="{{ url('admin/clinics/edit/'.$value->id) }}" class="btn btn-danger">Delete</a>
+                          @endif  
+                          
                         </td>
                       </tr>
                     @empty
