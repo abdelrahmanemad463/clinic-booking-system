@@ -58,10 +58,10 @@ class UserController extends Controller
 
         // send mail to user when book
         $auth = Auth::user();  // pass auth in variable instead make Auth::user() in blade view because when run php artisan queue:work it runs from cli and no user will be logged in to send mail so will make error
-        Mail::to(Auth::user()->email)->send(new BookMail($book , $auth));
+        // Mail::to(Auth::user()->email)->send(new BookMail($book , $auth));
         // send mail to doctor that user booked to him
         $doctor = User::find($book->doctor_id);
-        Mail::to($doctor->email)->send(new DoctorBookMail($book , $doctor , $auth));
+        // Mail::to($doctor->email)->send(new DoctorBookMail($book , $doctor , $auth));
         
         // send notification to doctor that user booked to him
         $content ="You have a new book | name: ".$auth->name." from ".$book->start_time." to ".$book->end_time;
